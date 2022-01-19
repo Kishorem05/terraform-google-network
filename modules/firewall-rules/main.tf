@@ -44,6 +44,14 @@ resource "google_compute_firewall" "rules" {
     }
   }
 
+  dynamic "allow" {
+    for_each = lookup(each.value, "allow", [])
+    content {
+      protocol = allow.value.protocol
+      ports    = lookup(allow.value, "ports", null)
+    }
+  }
+
   dynamic "deny" {
     for_each = lookup(each.value, "deny", [])
     content {
